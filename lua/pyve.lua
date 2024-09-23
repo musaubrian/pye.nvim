@@ -50,7 +50,7 @@ local function setup_venv()
 			local python_versions = vim.fn.readdir(lib_path, "v:val =~ '^python'")
 			if #python_versions > 0 then
 				local py_version = python_versions[1]
-				local site_packages = lib_path .. py_version
+				local site_packages = lib_path .. "/" .. py_version
 
 				if vim.fn.isdirectory(site_packages) == 1 then
 					vim.env.VIRTUAL_ENV = venv_path
