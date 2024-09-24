@@ -1,10 +1,10 @@
-# pyve.nvim
+# pye.nvim
 
 ## Why this exists
 Working with virtual environments in Python while using Neovim can be frustrating.
 The hassle of activating the environment, opening Neovim, opening a new terminal window,
 activating again, and using the correct path to the activation script can be tedious.
-*pyve* was born out of the desire to eliminate these worries and streamline the process -for me.
+*pye.nvim* was born out of the desire to eliminate these worries and streamline the process -for me.
 
 ## How it works
 
@@ -13,18 +13,18 @@ Brief overview,
 - It searches for a virtual environment by going up the directory structure until it finds one, using some [assumptions](#assumptions)
 
 ## Assumptions
-pyve makes several assumptions to function effectively:
-- Project root markers -> It checks for a limited number of [markers](https://github.com/musaubrian/pyve.nvim/blob/main/lua/pyve.lua#L2)
+It makes several assumptions to function effectively:
+- Project root markers -> It checks for a limited number of [markers](https://github.com/musaubrian/pye.nvim/blob/main/lua/pye.lua#L2)
 to see if its at the project root
-- Virtual environment names -> it tries to detect common [virtual envs names](https://github.com/musaubrian/pyve.nvim/blob/main/lua/pyve.lua#L37)
+- Virtual environment names -> it tries to detect common [virtual envs names](https://github.com/musaubrian/pye.nvim/blob/main/lua/pye.lua#L37)
 
 ## Setup
 Lazy:
 ```lua
 {
-    "musaubrian/pyve.nvim",
+    "musaubrian/pye.nvim",
     config = function
-        require("pyve")
+        require("pye")
     end
 }
 ```
@@ -32,8 +32,8 @@ Lazy:
 Packer:
 
 ```lua
-use { "musaubrian/pyve.nvim" }
-require("pyve")
+use { "musaubrian/pye.nvim" }
+require("pye")
 ```
 
 That's all you need to do
