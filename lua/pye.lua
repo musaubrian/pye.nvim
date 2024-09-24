@@ -75,9 +75,9 @@ vim.api.nvim_create_autocmd("Filetype", {
 	pattern = "python",
 	callback = function()
 		if setup_venv() then
-			vim.notify("[pyve] All set", vim.log.INFO)
+			vim.notify("[pye.nvim] All set", vim.log.INFO)
 		else
-			vim.notify("[pyve] Something went wrong", vim.log.ERROR)
+			vim.notify("[pye.nvim] Something went wrong", vim.log.ERROR)
 		end
 	end,
 })
