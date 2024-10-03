@@ -23,9 +23,9 @@ Lazy:
 ```lua
 {
     "musaubrian/pye.nvim",
-    config = function
-        require("pye")
-    end
+    opts = {
+        base_venv = "~/path/to/base/venv"
+    }
 }
 ```
 
@@ -33,7 +33,7 @@ Packer:
 
 ```lua
 use { "musaubrian/pye.nvim" }
-require("pye")
+require("pye").setup({ base_venv: "~/path/to/base/venv"})
 ```
 
 That's all you need to do
