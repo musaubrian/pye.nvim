@@ -89,6 +89,10 @@ function M.select_venv()
 			return item.name
 		end,
 	}, function(choice)
+		if choice == nil or choice == "" then
+			vim.notify("[pye.nvim] No Virtual env selected", vim.log.levels.INFO)
+			return
+		end
 		if M.setup_venv(choice.path) then
 			vim.notify("[pye.nvim] Virtual env ready", vim.log.levels.INFO)
 		else
