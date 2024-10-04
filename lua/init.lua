@@ -57,18 +57,22 @@ local function find_venvs(project_root)
 	local common_venv_names = { "venv", ".venv", "env" }
 	local venvs = {}
 
-	local expanded_base = vim.fn.expand(M.config.base_venv)
-
-	if M.config.base_venv and vim.fn.isdirectory(expanded_base) == 1 then
-		table.insert(venvs, { name = "Base venv: " .. M.config.base_venv, path = expanded_base })
-	end
-
 	-- Look for project-specific venvs
 	for _, dir in ipairs(common_venv_names) do
 		local venv_path = project_root .. "/" .. dir
 		if vim.fn.isdirectory(venv_path) == 1 then
 			table.insert(venvs, { name = "Project: " .. venv_path, path = venv_path })
 		end
+	end
+
+	if not M.config.base_venv then
+		return venvs
+	end
+
+	local expanded_base = vim.fn.expand(M.config.base_venv)
+
+	if M.config.base_venv and vim.fn.isdirectory(expanded_base) == 1 then
+		table.insert(venvs, { name = "Base: " .. M.config.base_venv, path = expanded_base })
 	end
 
 	return venvs
@@ -79,7 +83,15 @@ function M.select_venv()
 	local venvs = find_venvs(project_root)
 
 	if #venvs == 0 then
-		vim.notify("[pye.nvim] No virtual envs found", vim.log.levels.ERROR)
+		return
+	end
+
+	if #venvs == 1 then
+		if M.setup_venv(venvs[1].path) then
+			vim.notify("[pye.nvim] Activated virtual env: " .. venvs[1].name, vim.log.levels.INFO)
+		else
+			vim.notify("[pye.nvim] Failed to activate virtual env: " .. venvs[1].name, vim.log.levels.WARN)
+		end
 		return
 	end
 
@@ -89,14 +101,15 @@ function M.select_venv()
 			return item.name
 		end,
 	}, function(choice)
-		if choice == nil or choice == "" then
-			vim.notify("[pye.nvim] No Virtual env selected", vim.log.levels.INFO)
+		if choice == nil then
 			return
 		end
-		if M.setup_venv(choice.path) then
-			vim.notify("[pye.nvim] Virtual env ready", vim.log.levels.INFO)
-		else
-			vim.notify("[pye.nvim] Failed to activate virtual env" .. choice.name, vim.log.levels.WARN)
+		if choice then
+			if M.setup_venv(choice.path) then
+				vim.notify("[pye.nvim] Virtual env ready", vim.log.levels.INFO)
+			else
+				vim.notify("[pye.nvim] Failed to activate virtual env: " .. choice.name, vim.log.levels.WARN)
+			end
 		end
 	end)
 end
@@ -137,8 +150,13 @@ vim.api.nvim_create_autocmd("Filetype", {
 	pattern = "python",
 	callback = function()
 		if not vim.env.VIRTUAL_ENV then
-			vim.notify("[pye.nvim] No virtual environment active.", vim.log.levels.INFO)
-			M.select_venv()
+			local project_root = find_project_root()
+			local venvs = find_venvs(project_root)
+			if #venvs > 0 then
+				M.select_venv()
+			else
+				vim.notify("[pye.nvim] No virtual environments found.", vim.log.levels.INFO)
+			end
 		else
 			vim.notify("[pye.nvim] Active virtual env: " .. vim.env.VIRTUAL_ENV, vim.log.levels.INFO)
 		end
