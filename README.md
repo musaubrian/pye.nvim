@@ -14,9 +14,9 @@ Brief overview,
 
 ## Assumptions
 It makes several assumptions to function effectively:
-- Project root markers -> It checks for a limited number of [markers](https://github.com/musaubrian/pye.nvim/blob/main/lua/pye.lua#L2)
+- Project root markers -> It checks for a limited number of [markers](https://github.com/musaubrian/pye.nvim/blob/main/lua/init.lua#L21)
 to see if its at the project root
-- Virtual environment names -> it tries to detect common [virtual envs names](https://github.com/musaubrian/pye.nvim/blob/main/lua/pye.lua#L37)
+- Virtual environment names -> it tries to detect common [virtual envs names](https://github.com/musaubrian/pye.nvim/blob/main/lua/init.lua#L57)
 
 ## Setup
 Lazy:
