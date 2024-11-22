@@ -4,7 +4,6 @@
 ---@class Venv
 ---@field name string
 ---@field path string
-
 local M = {}
 
 ---@type Config
@@ -30,7 +29,6 @@ local function find_project_root()
 		"index.py",
 	}
 
-	-- local cwd = vim.fn.expand("%:p:h")
 	local cwd = vim.fn.getcwd()
 	local home_dir = vim.fn.expand("$HOME")
 
@@ -88,9 +86,9 @@ function M.select_venv()
 
 	if #venvs == 1 then
 		if M.setup_venv(venvs[1].path) then
-			vim.notify("[pye.nvim] Activated virtual env: " .. venvs[1].name, vim.log.levels.INFO)
+			vim.notify_once("[pye.nvim] Activated virtual env: " .. venvs[1].name, vim.log.levels.INFO)
 		else
-			vim.notify("[pye.nvim] Failed to activate virtual env: " .. venvs[1].name, vim.log.levels.WARN)
+			vim.notify_once("[pye.nvim] Failed to activate virtual env: " .. venvs[1].name, vim.log.levels.WARN)
 		end
 		return
 	end
@@ -106,9 +104,9 @@ function M.select_venv()
 		end
 		if choice then
 			if M.setup_venv(choice.path) then
-				vim.notify("[pye.nvim] Virtual env ready", vim.log.levels.INFO)
+				vim.notify_once("[pye.nvim] Virtual env ready", vim.log.levels.INFO)
 			else
-				vim.notify("[pye.nvim] Failed to activate virtual env: " .. choice.name, vim.log.levels.WARN)
+				vim.notify_once("[pye.nvim] Failed to activate virtual env: " .. choice.name, vim.log.levels.WARN)
 			end
 		end
 	end)
@@ -144,8 +142,6 @@ function M.setup_venv(venv_path)
 	return false
 end
 
-vim.api.nvim_create_user_command("SelectVenv", M.select_venv, {})
-
 vim.api.nvim_create_autocmd("Filetype", {
 	pattern = "python",
 	callback = function()
@@ -155,10 +151,10 @@ vim.api.nvim_create_autocmd("Filetype", {
 			if #venvs > 0 then
 				M.select_venv()
 			else
-				vim.notify("[pye.nvim] No virtual environments found.", vim.log.levels.INFO)
+				vim.notify_once("[pye.nvim] No virtual environments found.", vim.log.levels.INFO)
 			end
 		else
-			vim.notify("[pye.nvim] Active virtual env: " .. vim.env.VIRTUAL_ENV, vim.log.levels.INFO)
+			vim.notify_once("[pye.nvim] Active virtual env: " .. vim.env.VIRTUAL_ENV, vim.log.levels.INFO)
 		end
 	end,
 })
